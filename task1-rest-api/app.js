@@ -4,6 +4,9 @@ const express = require('express');
 // Create an instance of the Express application
 const app = express();
 
+// Import helper function for formatting UTC dates
+const { formatUTCDate } = require('./utils');
+
 // Import configuration settings
 const config = require('./config');
 
