@@ -1,4 +1,4 @@
-const formatUTCDate= function (date) {
+const formatUTCDate = function (date) {
     const year = date.getUTCFullYear();
     const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are 0-based
     const day = String(date.getUTCDate()).padStart(2, '0');
@@ -9,4 +9,7 @@ const formatUTCDate= function (date) {
     return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`;
 }
 
-export default formatUTCDate
+// Export the formatUTCDate function as a module.exports property
+module.exports = {
+    formatUTCDate,
+};
