@@ -43,8 +43,8 @@ app.get('/api', (req, res) => {
     // Construct a JSON response object
     const response = {
         "slack_name": slack_name,
-        "day": dayName,
-        "utc_timestamp": formatUTCDate(currentDate),
+        "current_day": dayName,
+        "utc_time": formatUTCDate(currentDate),
         "track": track,
         github_file_url: 'https://github.com/highb33kay/HNGx/blob/main/task1-rest-api/app.js',
         github_repo_url: 'https://github.com/highb33kay/HNGx/tree/main/task1-rest-api',
