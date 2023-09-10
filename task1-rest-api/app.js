@@ -16,6 +16,13 @@ const PORT = config.PORT || 4000;
 // Middleware to parse incoming JSON requests
 app.use(express.json());
 
+// Define a route for handling GET requests to the '/' path
+app.route('/').get((req, res)=>{
+    return res.status(200).send({
+        message: "visit /api?slack_name=your_slack_name&track=your_track to get your details"
+    })
+})
+
 // Define a route for handling GET requests to the '/api' path
 app.get('/api', (req, res) => {
     // Extract 'slack_name' and 'track' query parameters from the request
