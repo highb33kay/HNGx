@@ -37,10 +37,10 @@ app.get('/api', (req, res) => {
 
     // Construct a JSON response object
     const response = {
-        "slack_name": 'Ibukun Alesinloye',  // Replace with the actual slack_name
+        "slack_name": slack_name,  
         "day": currentDay,
         "utc_timestamp": utcTime,
-        "track": 'Backend',  // Replace with the actual track
+        "track": track,  
         github_file_url: 'https://github.com/highb33kay/HNGx/blob/main/task1-rest-api/app.js', 
         github_repo_url: 'https://github.com/highb33kay/HNGx/tree/main/task1-rest-api', 
         status_code: 200,
