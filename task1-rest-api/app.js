@@ -1,64 +1,84 @@
 // Import the Express.js framework
-const express = require('express');
+const express = require("express");
 
 // Create an instance of the Express application
 const app = express();
 
-// Import helper function for formatting UTC dates
-const { formatUTCDate } = require('./utils');
+const schema = require("./schema");
+
+const Person = schema.Person;
 
 // Import configuration settings
-const config = require('./config');
+const config = require("./config");
 
 // Set the port to use for the server, defaulting to 4000 if not provided in config
 const PORT = config.PORT || 4000;
 
-// Middleware to parse incoming JSON requests
+// Validation middleware for the "name" field
+function validateName(req, res, next) {
+  const { name } = req.body;
+  if (typeof name !== "string" || name.length < 3 || name.length > 50) {
+    return res.status(400).json({ message: "Invalid named" });
+  }
+  next(); // Move to the next middleware/route handler
+}
+
+// Use express.json() for parsing JSON data
 app.use(express.json());
 
-// Define a route for handling GET requests to the '/' path
-app.route('/').get((req, res)=>{
-    return res.status(200).send({
-        message: "visit /api?slack_name=your_slack_name&track=your_track to get your details"
-    })
-})
+// Define a route for handling Post requests to the '/' path
+app.post("/api", validateName, async (req, res) => {
+  try {
+    const { name } = req.body;
+    const person = new Person({
+      name,
+    });
+    const newPerson = await person.save();
+    res.status(201).json(newPerson);
+  } catch (error) {
+    res.status(400).json({ message: "Failed to create a person", error });
+  }
+});
 
-// Define a route for handling GET requests to the '/api' path
-app.get('/api', (req, res) => {
-    // Extract 'slack_name' and 'track' query parameters from the request
-    const { slack_name, track } = req.query;
+// Update a person by ID
+app.put("/api/:id", validateName, async (req, res) => {
+  try {
+    const { name } = req.body;
+    const updatedPerson = await Person.findByIdAndUpdate(
+      req.params.id,
+      { name },
+      { new: true }
+    );
+    if (!updatedPerson) throw Error("Person not found");
+    res.json(updatedPerson);
+  } catch (error) {
+    res.status(404).json({ message: "Person not found", error });
+  }
+});
 
-    // Check if 'slack_name' and 'track' parameters are provided
-    if (!slack_name || !track) {
-        // If either parameter is missing, return a 400 Bad Request response with an error message
-        return res.status(400).json({
-            message: "Please provide slack name and track"
-        })
-    }
+// Read Person by ID
+app.get("/api/:id", async (req, res) => {
+  try {
+    const person = await Person.findById(req.params.id);
+    if (!person) throw Error("No Person found");
+    res.json(person);
+  } catch (error) {
+    res.status(400).json({ message: "Failed to get a person", error });
+  }
+});
 
-    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const currentDate = new Date();
-    const dayName = daysOfWeek[currentDate.getDay()];
-
-    // Construct a JSON response object
-    const response = {
-        "slack_name": slack_name,
-        "current_day": dayName,
-        "utc_time": formatUTCDate(currentDate),
-        "track": track,
-        github_file_url: 'https://github.com/highb33kay/HNGx/blob/main/task1-rest-api/app.js',
-        github_repo_url: 'https://github.com/highb33kay/HNGx/tree/main/task1-rest-api',
-        status_code: 200,
-    }
-
-    // Send the JSON response
-    res.json(response);
-
-    // Log the response object to the console
-    console.log(response);
+// Delete a person by ID
+app.delete("/api/:id", async (req, res) => {
+  try {
+    const deletedPerson = await Person.findByIdAndRemove(req.params.id);
+    if (!deletedPerson) throw Error("Person not found");
+    res.json(deletedPerson);
+  } catch (error) {
+    res.status(404).json({ message: "Person not found", error });
+  }
 });
 
 // Start the Express server, listening on the specified port
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
