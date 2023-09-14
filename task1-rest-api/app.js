@@ -4,9 +4,16 @@ const express = require("express");
 // Create an instance of the Express application
 const app = express();
 
-const schema = require("./schema");
+// defining the schema for the task
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
-const Person = schema.Person;
+// Define a person schema
+const personSchema = new Schema({
+  name: String,
+});
+
+const Person = mongoose.model("Person", personSchema);
 
 // Import configuration settings
 const config = require("./config");
@@ -33,12 +40,10 @@ app.post("/api", validateName, async (req, res) => {
     const person = new Person({
       name,
     });
-    console.log("Person Object successfully");
     const newPerson = await person.save();
-    console.log("Person saved successfully");
     res.status(201).json(newPerson);
-    console.log("Person created successfully");
   } catch (error) {
+    console.error("Error creating a person:", error); // Log the error
     res.status(400).json({ message: "Failed to create a person", error });
   }
 });
