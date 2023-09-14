@@ -35,13 +35,12 @@ npm start
 
 ## Endpoints
 
-| Method | Endpoint          | Description       |
-| ------ | ----------------- | ----------------- |
-| POST   | /api/v1/users     | Create a new user |
-| GET    | /api/v1/users     | Get all users     |
-| GET    | /api/v1/users/:id | Get a single user |
-| PUT    | /api/v1/users/:id | Update a user     |
-| DELETE | /api/v1/users/:id | Delete a user     |
+| Method | Endpoint | Description       |
+| ------ | -------- | ----------------- |
+| POST   | /api/    | Create a new user |
+| GET    | /api/:id | Get a single user |
+| PUT    | /api/:id | Update a user     |
+| DELETE | /api/:id | Delete a user     |
 
 ## Author
 
