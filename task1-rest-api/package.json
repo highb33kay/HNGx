@@ -12,5 +12,8 @@
   "dependencies": {
     "express": "^4.18.2",
     "mongoose": "^7.5.1"
-  }
+  },
+"engines": {
+    "node": ">=NODE_JS_VERSION"
+}
 }
