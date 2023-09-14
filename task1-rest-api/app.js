@@ -4,8 +4,12 @@ const express = require("express");
 // Create an instance of the Express application
 const app = express();
 
-// defining the schema for the task
-const mongoose = require("mongoose");
+// require connectdb.js
+const connectDB = require("./connectdb");
+
+// Connect to MongoDB and get the mongoose instance
+const mongoose = connectDB();
+
 const { Schema } = mongoose;
 
 // Define a person schema
