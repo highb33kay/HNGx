@@ -8,16 +8,10 @@ const app = express();
 const connectDB = require("./connectdb");
 
 // Connect to MongoDB and get the mongoose instance
-const mongoose = connectDB();
+connectDB();
 
-const { Schema } = mongoose;
-
-// Define a person schema
-const personSchema = new Schema({
-  name: String,
-});
-
-const Person = mongoose.model("Person", personSchema);
+// Import the Person model
+const Person = require("./models/person");
 
 // Import configuration settings
 const config = require("./config");
