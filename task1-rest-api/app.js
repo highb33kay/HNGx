@@ -35,6 +35,7 @@ app.post("/api", validateName, async (req, res) => {
     });
     const newPerson = await person.save();
     res.status(201).json(newPerson);
+    console.log("Person created successfully");
   } catch (error) {
     res.status(400).json({ message: "Failed to create a person", error });
   }
